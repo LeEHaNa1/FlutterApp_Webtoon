@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterwebtoon/screen/home.dart';
-import 'package:flutterwebtoon/services/api_service.dart';
 
 void main() {
-  ApiService().getTodaysToon();
   runApp(const MyApp());
 }
 

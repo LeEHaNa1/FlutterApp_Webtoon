@@ -5,11 +5,12 @@ import "package:flutterwebtoon/models/webtoonmodel.dart";
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl = "https://webtoon-crawler.nomadcoders.workers.dev";
+  static const String baseUrl =
+      "https://webtoon-crawler.nomadcoders.workers.dev";
 
-  final String today = "today";
+  static const String today = "today";
 
-  Future<List<WebtoonModel>> getTodaysToon() async {
+  static Future<List<WebtoonModel>> getTodaysToon() async {
     // async타입이기 때문에 void가 아니라면 Future<>안에 반환 타입을 작성해야 함.
     List<WebtoonModel> webtoonInstances = [];
     // async를 작성해야 await 키워드를 사용할 수 있다.
