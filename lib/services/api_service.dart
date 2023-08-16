@@ -21,7 +21,8 @@ class ApiService {
       final List<dynamic> webtoons = jsonDecode(response.body);
       // jsonDecode로 반환 타입인 dynamic으로 list를 만든다는 의미.
       for (var webtoon in webtoons) {
-        webtoonInstances.add(WebtoonModel.fromJson(webtoon));
+        final instwebtoon = WebtoonModel.fromJson(webtoon);
+        webtoonInstances.add(instwebtoon);
       }
       return webtoonInstances;
     }

@@ -5,7 +5,7 @@ import 'package:flutterwebtoon/models/webtoonmodel.dart';
 class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
 
-  Future<List<WebtoonModel>> webtoons = ApiService.getTodaysToon();
+  final Future<List<WebtoonModel>> webtoons = ApiService.getTodaysToon();
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +21,21 @@ class Home extends StatelessWidget {
       ),
       body: FutureBuilder(
         future: webtoons,
-        builder: (context, snapshot) {
+        builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            return const Text("There is Data!");
+            return ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                var webtoo = snapshot.data![index];
+                return Text(webtoo.title);
+              },
+              separatorBuilder: (context, index) => const SizedBox(width: 20),
+            );
           }
-          return const Text("Loading");
+          return const Center(
+            child: CircularProgressIndicator(), // loading되기 하는 것.
+          );
         },
       ),
     );
