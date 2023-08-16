@@ -8,6 +8,15 @@
     "description": "A new Flutter project.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
+    "args": [
+        "chrome",
+        "--web-browser-flag",
+        "--disable-web-security"
+    ],
+    "dart.flutterRunAdditionalArgs": [
+        "--web-renderer",
+        "html"
+    ],
     "icons": [
         {
             "src": "icons/Icon-192.png",
