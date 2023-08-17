@@ -12,6 +12,7 @@ class Detail extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        centerTitle: true,
         elevation: 1.5, // appbar의 음영을 조절함.
         backgroundColor: Colors.white,
         foregroundColor: Colors.green,
