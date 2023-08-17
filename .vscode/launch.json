@@ -26,5 +26,5 @@
         "chrome",
         "--web-browser-flag",
         "--disable-web-security"
-    ],
+    ], // web(chrome)으로 debug을 할 때, image network 문제가 생기지 않도록 하는 코드
 }
