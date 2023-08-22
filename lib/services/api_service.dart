@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutterwebtoon/models/detailmodel.dart';
+import 'package:flutterwebtoon/models/episodemodel.dart';
 import "package:flutterwebtoon/models/webtoonmodel.dart";
 
 import 'package:http/http.dart' as http;
@@ -27,5 +29,31 @@ class ApiService {
       return webtoonInstances;
     }
     throw Error(); // error를 발생시킨다는 의미.
+  }
+
+  static Future<WebtoonDetailModel> getToonById(String id) async {
+    final url = Uri.parse("$baseUrl/$id");
+    final response = await http.get(url); // 만든 url로 request함. 성공적이면, if문 실행
+    if (response.statusCode == 200) {
+      final webtoon =
+          jsonDecode(response.body); // string 타입을 json으로 jsonDecode를 통해 바꿈.
+      return WebtoonDetailModel.fromJson(
+          webtoon); // WebtoonDetailModel.fromJson이 해당 json에 title, about, genre, age 값을 할당함.
+    }
+    throw Error();
+  }
+
+  static Future<List<episionModel>> getLatesEpisodeById(String id) async {
+    List<episionModel> episodesInstances = [];
+    final url = Uri.parse("$baseUrl/$id");
+    final response = await http.get(url); // 만든 url로 request함. 성공적이면, if문 실행
+    if (response.statusCode == 200) {
+      final episodes = jsonDecode(response.body);
+      for (var episode in episodes) {
+        episodesInstances.add(episionModel.fromJson(episode));
+      }
+      return episodesInstances;
+    }
+    throw Error();
   }
 }
