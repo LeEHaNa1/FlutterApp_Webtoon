@@ -74,6 +74,33 @@ class _DetailState extends State<Detail> {
               ),
             ],
           ),
+          const SizedBox(height: 20),
+          FutureBuilder(
+            future: webtoon,
+            builder: (context, AsyncSnapshot snapshot) {
+              // AsyncSnapshot 으로 타입을 지정해주지 않으면 오류가 발생한다.
+              if (snapshot.hasData) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        snapshot.data!.about,
+                        style: const TextStyle(fontSize: 15),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        '${snapshot.data!.genre} / ${snapshot.data!.age}',
+                        style: const TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return const Text('...');
+            },
+          )
         ],
       ),
     );

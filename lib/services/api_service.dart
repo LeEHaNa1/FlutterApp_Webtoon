@@ -45,7 +45,7 @@ class ApiService {
 
   static Future<List<episionModel>> getLatesEpisodeById(String id) async {
     List<episionModel> episodesInstances = [];
-    final url = Uri.parse("$baseUrl/$id");
+    final url = Uri.parse("$baseUrl/$id/episodes");
     final response = await http.get(url); // 만든 url로 request함. 성공적이면, if문 실행
     if (response.statusCode == 200) {
       final episodes = jsonDecode(response.body);
