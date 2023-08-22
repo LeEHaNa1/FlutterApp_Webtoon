@@ -41,7 +41,7 @@ class ApiService {
           webtoon); // WebtoonDetailModel.fromJson이 해당 json에 title, about, genre, age 값을 할당함.
     }
     throw Error();
-  }
+  } // id로 webtoon을 가져오는 method
 
   static Future<List<episionModel>> getLatesEpisodeById(String id) async {
     List<episionModel> episodesInstances = [];
@@ -55,5 +55,5 @@ class ApiService {
       return episodesInstances;
     }
     throw Error();
-  }
+  } // id로 최신 episode를 가져오는 method
 }
