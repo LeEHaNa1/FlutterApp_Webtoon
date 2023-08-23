@@ -3,6 +3,7 @@ import 'package:flutterwebtoon/models/detailmodel.dart';
 import 'package:flutterwebtoon/models/episodemodel.dart';
 import 'package:flutterwebtoon/services/api_service.dart';
 import 'package:flutterwebtoon/widget/episode.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Detail extends StatefulWidget {
   final String title, thumb, id; // StatefulWidget은 build에서 widget.__로 사용해야 함.
@@ -19,6 +20,38 @@ class _DetailState extends State<Detail> {
   late Future<WebtoonDetailModel>
       webtoon; // constructor에서 widget.id에 접근 불가능 -> 선언만 하고 initState로 이동
   late Future<List<episionModel>> episodes;
+  bool isLiked = false;
+  late SharedPreferences pref;
+
+  Future initPrefs() async {
+    pref = await SharedPreferences.getInstance();
+    final likedToons = pref.getStringList('likedToons');
+    if (likedToons != null) {
+      if (likedToons.contains(widget.id) == true) {
+        isLiked = true;
+        setState(() {
+          isLiked = true;
+        });
+      }
+    } else {
+      await pref.setStringList('likedToons', []); // 사용자가 처음 앱을 열었을 때의 상태
+    }
+  }
+
+  onHeartTap() async {
+    final likedToons = pref.getStringList('likedToons');
+    if (likedToons != null) {
+      if (isLiked) {
+        likedToons.remove(widget.id);
+      } else {
+        likedToons.add(widget.id);
+      }
+      await pref.setStringList('likedToons', likedToons);
+      setState(() {
+        isLiked = !isLiked;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -27,6 +60,7 @@ class _DetailState extends State<Detail> {
         ApiService.getToonById(widget.id); // initState에서는 widget.id에 접근 가능
     episodes = ApiService.getLatesEpisodeById(
         widget.id); // data를 받아와야 하기 때문에 statefulwidget을 사용함.
+    initPrefs();
   }
 
   @override
@@ -38,6 +72,14 @@ class _DetailState extends State<Detail> {
         elevation: 1.5, // appbar의 음영을 조절함.
         backgroundColor: Colors.white,
         foregroundColor: Colors.green,
+        actions: [
+          IconButton(
+            onPressed: onHeartTap,
+            icon: Icon(
+                isLiked ? Icons.favorite : Icons.favorite_outline_outlined,
+                size: 35),
+          ),
+        ],
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
