@@ -144,9 +144,20 @@ class _DetailState extends State<Detail> {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              snapshot.data!.about,
-                              style: const TextStyle(fontSize: 15),
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.blue.shade200.withOpacity(0.5),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                      width: 1.8,
+                                      color:
+                                          Colors.blueAccent.withOpacity(0.8))),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              child: Text(
+                                snapshot.data!.about,
+                                style: const TextStyle(fontSize: 15),
+                              ),
                             ),
                             const SizedBox(height: 15),
                             Text(

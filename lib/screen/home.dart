@@ -28,6 +28,7 @@ class Home extends StatelessWidget {
               children: [
                 const SizedBox(height: 50),
                 Expanded(child: makeList(snapshot)),
+                const SizedBox(height: 80),
               ],
             );
           }
