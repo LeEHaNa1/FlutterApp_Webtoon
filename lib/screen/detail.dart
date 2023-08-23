@@ -24,7 +24,8 @@ class _DetailState extends State<Detail> {
     super.initState();
     webtoon =
         ApiService.getToonById(widget.id); // initState에서는 widget.id에 접근 가능
-    episodes = ApiService.getLatesEpisodeById(widget.id);
+    episodes = ApiService.getLatesEpisodeById(
+        widget.id); // data를 받아와야 하기 때문에 statefulwidget을 사용함.
   }
 
   @override
@@ -46,62 +47,99 @@ class _DetailState extends State<Detail> {
           ],
         ),
       ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 50,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+          child: Column(
             children: [
-              Hero(
-                tag: widget.id,
-                child: Container(
-                  width: 250,
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 5,
-                        offset: const Offset(9, 8),
-                        color: Colors.black.withOpacity(0.5),
-                      )
-                    ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Hero(
+                    tag: widget.id,
+                    child: Container(
+                      width: 250,
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 5,
+                            offset: const Offset(9, 8),
+                            color: Colors.black.withOpacity(0.5),
+                          )
+                        ],
+                      ),
+                      child: Image.network(widget.thumb),
+                    ),
                   ),
-                  child: Image.network(widget.thumb),
-                ),
+                ],
               ),
+              const SizedBox(height: 20),
+              FutureBuilder(
+                future: webtoon,
+                builder: (context, AsyncSnapshot snapshot) {
+                  // AsyncSnapshot 으로 타입을 지정해주지 않으면 오류가 발생한다.
+                  if (snapshot.hasData) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          snapshot.data!.about,
+                          style: const TextStyle(fontSize: 15),
+                        ),
+                        const SizedBox(height: 15),
+                        Text(
+                          '${snapshot.data!.genre} / ${snapshot.data!.age}',
+                          style: const TextStyle(fontSize: 15),
+                        ),
+                      ],
+                    );
+                  }
+                  return const Text('...');
+                },
+              ),
+              const SizedBox(height: 20),
+              FutureBuilder(
+                future: episodes,
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: [
+                        for (var episode in snapshot.data!.length > 10
+                            ? snapshot.data!.sublist(0, 10)
+                            : snapshot.data!)
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.blueAccent.withOpacity(0.8),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(episode.title,
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 15)),
+                                  const Icon(Icons.chevron_right_outlined,
+                                      color: Colors.white),
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  }
+                  return Container();
+                },
+              )
             ],
           ),
-          const SizedBox(height: 20),
-          FutureBuilder(
-            future: webtoon,
-            builder: (context, AsyncSnapshot snapshot) {
-              // AsyncSnapshot 으로 타입을 지정해주지 않으면 오류가 발생한다.
-              if (snapshot.hasData) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        snapshot.data!.about,
-                        style: const TextStyle(fontSize: 15),
-                      ),
-                      const SizedBox(height: 15),
-                      Text(
-                        '${snapshot.data!.genre} / ${snapshot.data!.age}',
-                        style: const TextStyle(fontSize: 15),
-                      ),
-                    ],
-                  ),
-                );
-              }
-              return const Text('...');
-            },
-          )
-        ],
+        ),
       ),
     );
   }
