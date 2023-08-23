@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterwebtoon/models/detailmodel.dart';
 import 'package:flutterwebtoon/models/episodemodel.dart';
 import 'package:flutterwebtoon/services/api_service.dart';
+import 'package:flutterwebtoon/widget/episode.dart';
 
 class Detail extends StatefulWidget {
   final String title, thumb, id; // StatefulWidget은 build에서 widget.__로 사용해야 함.
@@ -109,28 +110,8 @@ class _DetailState extends State<Detail> {
                         for (var episode in snapshot.data!.length > 10
                             ? snapshot.data!.sublist(0, 10)
                             : snapshot.data!)
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 8),
-                            decoration: BoxDecoration(
-                              color: Colors.blueAccent.withOpacity(0.8),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(episode.title,
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 15)),
-                                  const Icon(Icons.chevron_right_outlined,
-                                      color: Colors.white),
-                                ],
-                              ),
-                            ),
-                          ),
+                          webtoonEpisode(
+                              episode: episode, webtoonId: widget.id),
                       ],
                     );
                   }
