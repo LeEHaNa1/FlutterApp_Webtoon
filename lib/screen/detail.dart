@@ -72,14 +72,6 @@ class _DetailState extends State<Detail> {
         elevation: 1.5, // appbar의 음영을 조절함.
         backgroundColor: Colors.white,
         foregroundColor: Colors.green,
-        actions: [
-          IconButton(
-            onPressed: onHeartTap,
-            icon: Icon(
-                isLiked ? Icons.favorite : Icons.favorite_outline_outlined,
-                size: 35),
-          ),
-        ],
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -91,77 +83,104 @@ class _DetailState extends State<Detail> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Hero(
-                    tag: widget.id,
-                    child: Container(
-                      width: 250,
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 5,
-                            offset: const Offset(9, 8),
-                            color: Colors.black.withOpacity(0.5),
-                          )
-                        ],
+                  SizedBox(
+                    width: 50,
+                    child: IconButton(
+                      onPressed: onHeartTap,
+                      icon: Icon(
+                        isLiked
+                            ? Icons.favorite
+                            : Icons.favorite_outline_outlined,
+                        size: 35,
+                        color: Colors.green,
                       ),
-                      child: Image.network(widget.thumb),
                     ),
                   ),
+                  const SizedBox(width: 10),
                 ],
               ),
-              const SizedBox(height: 20),
-              FutureBuilder(
-                future: webtoon,
-                builder: (context, AsyncSnapshot snapshot) {
-                  // AsyncSnapshot 으로 타입을 지정해주지 않으면 오류가 발생한다.
-                  if (snapshot.hasData) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          snapshot.data!.about,
-                          style: const TextStyle(fontSize: 15),
+            ),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, right: 40, bottom: 40),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Hero(
+                        tag: widget.id,
+                        child: Container(
+                          width: 250,
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 5,
+                                offset: const Offset(9, 8),
+                                color: Colors.black.withOpacity(0.5),
+                              )
+                            ],
+                          ),
+                          child: Image.network(widget.thumb),
                         ),
-                        const SizedBox(height: 15),
-                        Text(
-                          '${snapshot.data!.genre} / ${snapshot.data!.age}',
-                          style: const TextStyle(fontSize: 15),
-                        ),
-                      ],
-                    );
-                  }
-                  return const Text('...');
-                },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  FutureBuilder(
+                    future: webtoon,
+                    builder: (context, AsyncSnapshot snapshot) {
+                      // AsyncSnapshot 으로 타입을 지정해주지 않으면 오류가 발생한다.
+                      if (snapshot.hasData) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              snapshot.data!.about,
+                              style: const TextStyle(fontSize: 15),
+                            ),
+                            const SizedBox(height: 15),
+                            Text(
+                              '${snapshot.data!.genre} / ${snapshot.data!.age}',
+                              style: const TextStyle(fontSize: 15),
+                            ),
+                          ],
+                        );
+                      }
+                      return const Text('...');
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  FutureBuilder(
+                    future: episodes,
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData) {
+                        return Column(
+                          children: [
+                            for (var episode in snapshot.data!.length > 10
+                                ? snapshot.data!.sublist(0, 10)
+                                : snapshot.data!)
+                              webtoonEpisode(
+                                  episode: episode, webtoonId: widget.id),
+                          ],
+                        );
+                      }
+                      return Container();
+                    },
+                  )
+                ],
               ),
-              const SizedBox(height: 20),
-              FutureBuilder(
-                future: episodes,
-                builder: (context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData) {
-                    return Column(
-                      children: [
-                        for (var episode in snapshot.data!.length > 10
-                            ? snapshot.data!.sublist(0, 10)
-                            : snapshot.data!)
-                          webtoonEpisode(
-                              episode: episode, webtoonId: widget.id),
-                      ],
-                    );
-                  }
-                  return Container();
-                },
-              )
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
