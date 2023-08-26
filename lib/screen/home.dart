@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterwebtoon/services/api_service.dart';
 import 'package:flutterwebtoon/models/webtoonmodel.dart';
 import 'package:flutterwebtoon/widget/webtoon_widget.dart';
+import 'package:flutterwebtoon/widget/liked_widget.dart';
 
 class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
@@ -28,7 +29,8 @@ class Home extends StatelessWidget {
               children: [
                 const SizedBox(height: 50),
                 Expanded(child: makeList(snapshot)),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
+                const LikedWidget(),
               ],
             );
           }
