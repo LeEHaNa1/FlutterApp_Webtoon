@@ -10,7 +10,7 @@ class LikedWidget extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Liked()),
+          MaterialPageRoute(builder: (context) => const Liked()),
         );
       },
       child: Padding(

@@ -22,12 +22,13 @@ class _DetailState extends State<Detail> {
   late Future<List<episionModel>> episodes;
   bool isLiked = false;
   late SharedPreferences pref;
+  late List<String> liked = [];
 
   Future initPrefs() async {
     pref = await SharedPreferences.getInstance();
     final likedToons = pref.getStringList('likedToons');
     if (likedToons != null) {
-      if (likedToons.contains(widget.id) == true) {
+      if (likedToons.contains(widget.title) == true) {
         isLiked = true;
         setState(() {
           isLiked = true;
@@ -42,9 +43,9 @@ class _DetailState extends State<Detail> {
     final likedToons = pref.getStringList('likedToons');
     if (likedToons != null) {
       if (isLiked) {
-        likedToons.remove(widget.id);
+        likedToons.remove(widget.title);
       } else {
-        likedToons.add(widget.id);
+        likedToons.add(widget.title);
       }
       await pref.setStringList('likedToons', likedToons);
       setState(() {
@@ -187,7 +188,7 @@ class _DetailState extends State<Detail> {
                       }
                       return Container();
                     },
-                  )
+                  ),
                 ],
               ),
             ),
